@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-abstract class Controller
+use Illuminate\Database\Eloquent\Model;
+
+class Controller extends Model
 {
     //
 }
