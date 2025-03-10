@@ -2,16 +2,17 @@
     <div x-data="{ 
         selectedIndex: localStorage.getItem('selectedIndex') ? parseInt(localStorage.getItem('selectedIndex')) : 0,  
         plants: {{ $subPlants->isNotEmpty() ? $subPlants->toJson() : collect([$plant])->toJson() }},
-        selectedPlantId: {{ $subPlants->isNotEmpty() ? $subPlants->first()->id : $plant->id }},
-        selectedPlantName: '{{ $subPlants->isNotEmpty() ? $subPlants->first()->name : $plant->name }}',
+        selectedPlantId: null,
+        selectedPlantName: '',
+
         init() {
             if (this.plants.length > 0) {
-                this.selectedIndex = 0;
-                this.selectedPlantId = this.plants[0]?.id ?? null;
-                this.selectedPlantName = this.plants[0]?.name ?? 'Unknown Plant';
+                this.selectedIndex = this.selectedIndex < this.plants.length ? this.selectedIndex : 0; 
+                this.selectedPlantId = this.plants[this.selectedIndex]?.id ?? null;
+                this.selectedPlantName = this.plants[this.selectedIndex]?.name ?? 'Unknown Plant';
             }
         }
-        }" class="max-w-6xl mx-auto overflow-hidden mt-10"
+    }" class="max-w-6xl mx-auto overflow-hidden mt-10"
             x-init="$watch('selectedIndex', value => localStorage.setItem('selectedIndex', value))">
         
         <div class="p-8 md:flex gap-2">
