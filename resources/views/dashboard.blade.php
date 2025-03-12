@@ -1,5 +1,5 @@
 <x-layouts.app>
-    <h1 class="flex items-center justify-center uppercase font-serif text-3xl mb-15">Guide</h1>
+    <h1 class="flex items-center justify-center uppercase font-serif text-3xl mb-15">Dashboard</h1>
 
 	<div class="p-4 max-w-6xl mx-auto ">
 		<h2 id="date" class="text-xl uppercase"></h2>
@@ -150,6 +150,43 @@ function calendar() {
 
         get userAddedEvents() {
             return Object.values(this.events).flat().filter(event => event.manual === true);
+        },
+
+        get filteredInProgressEvents() {
+            return Object.keys(this.events)
+                .reduce((acc, date) => {
+                    let filteredEvents = this.events[date].filter(event => event.status && event.status === 'in_progress');
+                    if (filteredEvents.length) acc[date] = filteredEvents;
+                    return acc;
+                }, {});
+        },
+
+        get filteredDoneEvents() {
+            return Object.keys(this.events)
+                .reduce((acc, date) => {
+                    let filteredEvents = this.events[date].filter(event => event.status && event.status === 'done');
+                    if (filteredEvents.length) acc[date] = filteredEvents;
+                    return acc;
+                }, {});
+        },
+        updateEvents(eventId, newStatus, event) {
+            // Aktualizace statusu přímo v seznamu eventů
+            Object.keys(this.events).forEach(date => {
+                this.events[date].forEach(eventItem => {
+                    if (eventItem.id === eventId) {
+                        eventItem.status = newStatus;
+                    }
+                });
+            });
+
+            // Aktualizace hidden inputu
+            let hiddenInput = event.target.querySelector('input[name="status"]');
+            hiddenInput.value = newStatus;
+
+            // Odeslání formuláře
+            setTimeout(() => {
+                event.target.submit();
+            }, 100);
         }
     };
 }

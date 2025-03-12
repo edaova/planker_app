@@ -18,6 +18,7 @@ class Event extends Model
         'event_date',
         'notes',
         'color',
+        'status'
     ];
 
     // Každý event patří jednomu uživateli

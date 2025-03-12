@@ -41,6 +41,7 @@ class EventController extends Controller
             'once every two weeks' => 14,
             'once every three months' => 90,
             'mist twice a week' => 3,
+
         ];
 
         $frequencyDays = $frequencies[strtolower($validated['event_type'] === 'watering' ? $plant->watering_frequency : $plant->fertilizing_frequency)] ?? null;
@@ -76,7 +77,23 @@ class EventController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Event successfully added!');
+        return redirect('/dashboard');
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $event = Event::findOrFail($id);
+
+        // Ověření oprávnění
+        if ($event->user_id !== Auth::id()) {
+            return redirect()->back()->with('error', 'Unauthorized');
+        }
+
+        // Aktualizace stavu
+        $event->update(['status' => $request->input('status')]);
+
+        return redirect()->route('dashboard', ['month' => $request->month, 'year' => $request->year])
+                        ->with('success', 'Event status updated!');
     }
 
     public function deleteEvent($id)
@@ -85,9 +102,9 @@ class EventController extends Controller
 
         if ($event && $event->user_id === Auth::id()) {
             $event->delete();
-            return redirect()->route('dashboard')->with('success', 'Event deleted successfully.');
+            return redirect()->route('dashboard');
         }
 
-        return redirect()->route('dashboard')->with('error', 'Event not found or unauthorized.');
+        return redirect()->route('dashboard');
     }
 }

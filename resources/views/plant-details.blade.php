@@ -15,7 +15,7 @@
     }" class="max-w-6xl mx-auto overflow-hidden mt-10"
             x-init="$watch('selectedIndex', value => localStorage.setItem('selectedIndex', value))">
         
-        <div class="p-8 md:flex gap-2">
+        <div class="p-8 md:flex gap-4">
             
             <!-- Left Column - Image Carousel -->
             <div class="relative overflow-hidden">

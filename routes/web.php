@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Eventy
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::post('/events/{id}/update-status', [EventController::class, 'updateStatus'])->name('events.updateStatus');
     Route::delete('/events/{id}', [EventController::class, 'deleteEvent'])->name('events.destroy');
 
     // Rostliny

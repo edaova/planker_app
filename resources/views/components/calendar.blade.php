@@ -58,32 +58,125 @@
             </div>
         </div>
 
-       <!-- Upcoming events --> 
-        <div class="w-full md:w-1/3 bg-white rounded-lg shadow border border-gray-200 p-6 h-[500px] overflow-y-auto">
-            <h2 class="text-xl font-bold text-gray-700 border-b border-gray-200 pb-2 mb-4">Upcoming Events</h2>
-            <template x-for="(eventList, date) in filteredUpcomingEvents">
-                <div class="mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-1" x-text="formatDateForList(date)"></h3>
-                    <template x-for="event in eventList">
-                        <div class="flex items-center justify-between mt-2 p-2 text-xs">
-                            <div class="flex items-center space-x-2">
-                                <span class="w-1 h-6 block" :style="'background-color: ' + event.color"></span>
-                                <span :style="'color: ' + event.color" x-text="event.plant_name"></span>
-                                <span :style="'color: ' + event.color" x-text="event.event_type === 'watering' ? '💧 Watering' : '🌱 Fertilizer'"></span>
-                            </div>
-                            <form method="POST" x-bind:action="'/events/' + event.id">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="hover:text-red-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
-                                        <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
-                                    </svg>
-                                </button>
-                            </form>
-                        </div>
-                    </template>
+        <!-- Upcoming, in progress a done events --> 
+        <div class="w-full md:w-1/3 space-y-6">  
+            <div class="bg-white h-[350px] overflow-y-auto border-b border-gray-200 relative">
+                <div class="flex gap-2 p-1 text-red-600 font-semibold font-3xl uppercase bg-red-100 border border-red-300 justify-center sticky top-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-ring"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M22 8c0-2.3-.8-4.3-2-6"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/><path d="M4 2C2.8 3.7 2 5.7 2 8"/></svg>
+                    <h2>Upcoming events</h2>
                 </div>
-            </template>
+                <template x-for="(eventList, date) in filteredUpcomingEvents">
+                    <div class="mb-4 p-2">
+                        <h3 class="text-md font-semibold text-gray-800 pb-1" x-text="formatDateForList(date)"></h3>
+                        <template x-for="event in eventList">
+                            <div class="flex flex-col space-y-1 p-2 text-xs border shadow border-gray-200 pb-2 rounded-sm">
+                                <div class="flex items-center justify-between p-2 text-xs">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="w-1 h-6 block" :style="'background-color: ' + event.color"></span>
+                                        <span :style="'color: ' + event.color" x-text="event.plant_name"></span>
+                                        <span :style="'color: ' + event.color" x-text="event.event_type === 'watering' ? '💧 Watering' : '🌱 Fertilizer'"></span>
+                                    </div>
+                                    <form method="POST" x-bind:action="'/events/' + event.id">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="hover:text-red-500">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x cursor-pointer">
+                                                <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                                <template x-if="event.notes">
+                                    <div class="flex items-center space-x-1 text-gray-800 text-xs italic">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-notebook-pen"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"/><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><path d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/>
+                                        </svg>
+                                        <span class="font-semibold">NOTES:</span>
+                                        <span x-text="event.notes"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>      
+            </div>
+
+            <!-- In progress sekce -->
+            <div class="bg-white border-b border-gray-200 h-[200px] overflow-auto relative">
+                <div class="flex gap-2 border border-yellow-300 p-1 bg-yellow-100 text-yellow-500 uppercase font-2xl font-semibold justify-center sticky top-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hourglass"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>
+                    <span>Events in progress</span>
+                </div>
+                <template x-for="(eventList, date) in filteredInProgressEvents">
+                    <div class="mb-4 p-2">
+                        <h3 class="text-md font-semibold text-gray-800 pb-1" x-text="formatDateForList(date)"></h3>
+                        <template x-for="event in eventList">
+                            <div class="flex flex-col space-y-1 p-2 text-xs border shadow border-gray-200 pb-2 rounded-sm">
+                                <div class="flex items-center justify-between p-2 text-xs">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="w-1 h-6 block" :style="'background-color: ' + event.color"></span>
+                                        <span :style="'color: ' + event.color" x-text="event.plant_name"></span>
+                                        <span :style="'color: ' + event.color" x-text="event.event_type === 'watering' ? '💧 Watering' : '🌱 Fertilizer'"></span>
+                                    </div>
+                                    <form method="POST" x-bind:action="'/events/' + event.id + '/update-status'">
+                                        @csrf
+                                        <input type="hidden" name="status" value="done">
+                                        <button type="submit" class="hover:text-green-500 cursor-pointer">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
+                                        </button>
+                                    </form>
+                                </div>
+                                <template x-if="event.notes">
+                                    <div class="flex items-center space-x-1 text-gray-800 text-xs italic">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-notebook-pen"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"/><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><path d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/>
+                                        </svg>
+                                        <span class="font-semibold">NOTES:</span>
+                                        <span x-text="event.notes"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Done sekce -->
+            <div class="bg-white border-b border-gray-200 h-[200px] overflow-auto relative">
+                <div class="flex gap-2 border border-green-300 p-1 bg-green-100 text-green-500 uppercase font-2xl font-semibold justify-center sticky top-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-check-big"><path d="M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.5"/><path d="m9 11 3 3L22 4"/></svg>
+                    <h2 class="">Done events</h2>
+                </div>
+                <template x-for="(eventList, date) in filteredDoneEvents">
+                    <div class="mb-4 p-2">
+                        <h3 class="text-md font-semibold text-gray-800 pb-1" x-text="formatDateForList(date)"></h3>
+                        <template x-for="event in eventList">
+                            <div class="flex flex-col space-y-1 p-2 text-xs border shadow border-gray-200 pb-2 rounded-sm">
+                                <div class="flex items-center justify-between p-2 text-xs">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="w-1 h-6 block" :style="'background-color: ' + event.color"></span>
+                                        <span :style="'color: ' + event.color" x-text="event.plant_name"></span>
+                                        <span :style="'color: ' + event.color" x-text="event.event_type === 'watering' ? '💧 Watering' : '🌱 Fertilizer'"></span>
+                                    </div>
+                                    <form method="POST" x-bind:action="'/events/' + event.id + '/update-status'">
+                                        @csrf
+                                        <input type="hidden" name="status" value="in_progress">
+                                        <button type="submit" class="hover:text-yellow-500">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-undo-2 cursor-pointer"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>
+                                        </button>
+                                    </form>
+                                </div>
+                                <template x-if="event.notes">
+                                    <div class="flex items-center space-x-1 text-gray-800 text-xs italic">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-notebook-pen"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"/><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><path d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/>
+                                        </svg>
+                                        <span class="font-semibold">NOTES:</span>
+                                        <span x-text="event.notes"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
         </div>
     </div>
 
@@ -103,7 +196,8 @@
             <form method="POST" action="{{ route('events.store') }}">
 
                 @csrf
-                <input type="hidden" name="event_date" x-model="selectedDate">
+                <input type="hidden" name="month" x-model="currentMonth">
+                <input type="hidden" name="year" x-model="currentYear">
                     <div class="mb-4">
                         <label class="text-gray-800 block mb-1 font-bold text-sm tracking-wide">Choose a plant</label>
                         <div class="relative">
