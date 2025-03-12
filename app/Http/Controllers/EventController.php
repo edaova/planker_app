@@ -41,7 +41,6 @@ class EventController extends Controller
             'once every two weeks' => 14,
             'once every three months' => 90,
             'mist twice a week' => 3,
-
         ];
 
         $frequencyDays = $frequencies[strtolower($validated['event_type'] === 'watering' ? $plant->watering_frequency : $plant->fertilizing_frequency)] ?? null;

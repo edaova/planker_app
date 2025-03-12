@@ -16,12 +16,6 @@ class UserPlant extends Model
         'user_id',
         'plant_id',
         'plant_name',
-        'last_watered',
-        'watering_frequency',
-        'last_fertilized',
-        'fertilizer',
-        'location',
-        'notes'
     ];
 
     // Uživatel, kterému patří tato rostlina
