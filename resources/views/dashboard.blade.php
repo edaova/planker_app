@@ -72,7 +72,6 @@ function calendar() {
         showEventModal: false,
         selectedEvent: null,
         selectedDate: null,
-        event_date: '',
         selectedPlant: '',
         selectedType: 'watering',
         selectedColor: '#4CAF50',
@@ -98,7 +97,7 @@ function calendar() {
 
         openModal(day) {
             let rawDate = new Date(this.currentYear, this.currentMonth, day);
-            this.selectedDate = rawDate.toLocaleDateString('en-CA');
+            this.selectedDate = `${this.currentYear}-${String(this.currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             this.selectedColor = '#4CAF50';
             this.showModal = true;
         },
@@ -125,7 +124,6 @@ function calendar() {
                 this.currentMonth = 11;
                 this.currentYear--;
             }
-            this.fetchEvents();
         },
 
         nextMonth() {
@@ -134,7 +132,6 @@ function calendar() {
                 this.currentMonth = 0;
                 this.currentYear++;
             }
-            this.fetchEvents();
         },
 
         formatDateForList(date) {
@@ -146,10 +143,6 @@ function calendar() {
             return Object.keys(this.events)
                 .filter(date => new Date(date) >= new Date()) // Pouze budoucí eventy
                 .reduce((acc, date) => ({ ...acc, [date]: this.events[date] }), {});
-        },
-
-        get userAddedEvents() {
-            return Object.values(this.events).flat().filter(event => event.manual === true);
         },
 
         get filteredInProgressEvents() {
@@ -169,6 +162,7 @@ function calendar() {
                     return acc;
                 }, {});
         },
+
         updateEvents(eventId, newStatus, event) {
             // Aktualizace statusu přímo v seznamu eventů
             Object.keys(this.events).forEach(date => {

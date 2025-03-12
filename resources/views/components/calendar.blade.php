@@ -69,7 +69,7 @@
                     <div class="mb-4 p-2">
                         <h3 class="text-md font-semibold text-gray-800 pb-1" x-text="formatDateForList(date)"></h3>
                         <template x-for="event in eventList">
-                            <div class="flex flex-col space-y-1 p-2 text-xs border shadow border-gray-200 pb-2 rounded-sm">
+                            <div class="flex flex-col space-y-1 p-2 text-xs border shadow border-gray-200 pb-2 rounded-sm mb-4">
                                 <div class="flex items-center justify-between p-2 text-xs">
                                     <div class="flex items-center space-x-2">
                                         <span class="w-1 h-6 block" :style="'background-color: ' + event.color"></span>
@@ -110,7 +110,7 @@
                     <div class="mb-4 p-2">
                         <h3 class="text-md font-semibold text-gray-800 pb-1" x-text="formatDateForList(date)"></h3>
                         <template x-for="event in eventList">
-                            <div class="flex flex-col space-y-1 p-2 text-xs border shadow border-gray-200 pb-2 rounded-sm">
+                            <div class="flex flex-col space-y-1 p-2 text-xs border shadow border-gray-200 pb-2 rounded-sm mb-4">
                                 <div class="flex items-center justify-between p-2 text-xs">
                                     <div class="flex items-center space-x-2">
                                         <span class="w-1 h-6 block" :style="'background-color: ' + event.color"></span>
@@ -149,7 +149,7 @@
                     <div class="mb-4 p-2">
                         <h3 class="text-md font-semibold text-gray-800 pb-1" x-text="formatDateForList(date)"></h3>
                         <template x-for="event in eventList">
-                            <div class="flex flex-col space-y-1 p-2 text-xs border shadow border-gray-200 pb-2 rounded-sm">
+                            <div class="flex flex-col space-y-1 p-2 text-xs border shadow border-gray-200 pb-2 rounded-sm mb-4">
                                 <div class="flex items-center justify-between p-2 text-xs">
                                     <div class="flex items-center space-x-2">
                                         <span class="w-1 h-6 block" :style="'background-color: ' + event.color"></span>
@@ -196,8 +196,6 @@
             <form method="POST" action="{{ route('events.store') }}">
 
                 @csrf
-                <input type="hidden" name="month" x-model="currentMonth">
-                <input type="hidden" name="year" x-model="currentYear">
                     <div class="mb-4">
                         <label class="text-gray-800 block mb-1 font-bold text-sm tracking-wide">Choose a plant</label>
                         <div class="relative">
@@ -218,7 +216,7 @@
                     <!-- Datum eventu -->
                     <div class="mb-4">
                         <label class="text-gray-800 block mb-1 font-bold text-sm tracking-wide">Event date</label>
-                        <input name="event_date" type="date" x-model="selectedDate" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
+                        <input name="event_date" type="date" x-model="selectedDate" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" readonly>
                     </div>
             
                     <div class="mb-4">
@@ -267,7 +265,7 @@
         </div>
     </div>
 
-    <!-- 🛑 Modal pro smazání eventu -->
+    <!-- Modal pro smazání eventu -->
     <div x-show="showEventModal" style="background-color: rgba(0, 0, 0, 0.8)" class="fixed z-40 top-0 right-0 left-0 bottom-0 h-full w-full flex items-center justify-center">
         <div class="p-4 max-w-md bg-white rounded-lg shadow-lg relative">
             <button @click="showEventModal = false" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
